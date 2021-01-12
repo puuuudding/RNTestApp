@@ -3,6 +3,7 @@ import {View, Text, FlatList} from 'react-native';
 
 const HEADER_SEARCH_KEY = 'header-search';
 const HEADER_FILTER_KEY = 'header-filter';
+const EMPTY_LIST_KEY = 'list-empty';
 async function generateData(page: number) {
   const now = new Date().valueOf();
   const data = [];
@@ -23,10 +24,11 @@ function FLView() {
 
   useEffect(() => {
     (async () => {
+      const newData = await generateData(0);
       setData([
         {key: HEADER_SEARCH_KEY},
         {key: HEADER_FILTER_KEY},
-        ...(await generateData(0)),
+        ...(newData.length === 0 ? [{key: EMPTY_LIST_KEY}] : newData),
       ]);
     })();
   }, []);
@@ -38,10 +40,11 @@ function FLView() {
   };
   const handleRefresh = async () => {
     setLoading(true);
+    const newData = await generateData(0);
     setData([
       {key: HEADER_SEARCH_KEY},
       {key: HEADER_FILTER_KEY},
-      ...(await generateData(0)),
+      ...(newData.length === 0 ? [{key: EMPTY_LIST_KEY}] : newData),
     ]);
     setPage(0);
     setLoading(false);
@@ -55,6 +58,7 @@ function FLView() {
       removeClippedSubviews={false} // https://github.com/facebook/react-native/issues/25157
       refreshing={loading}
       onRefresh={handleRefresh}
+      alwaysBounceVertical={false}
       ListHeaderComponent={() => (
         <View
           style={{
@@ -92,6 +96,17 @@ function FLView() {
                   borderBottomColor: '#ddd',
                 }}>
                 <Text>This is the filter</Text>
+              </View>
+            );
+          case EMPTY_LIST_KEY:
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text>This list is empty</Text>
               </View>
             );
           default:
