@@ -10,6 +10,11 @@ function Home({navigation}: StackScreenProps<any>) {
         onPress={() => navigation.navigate('PDF')}>
         <Text>To PDF</Text>
       </Pressable>
+      <Pressable
+        style={{padding: 16}}
+        onPress={() => navigation.navigate('FlatList')}>
+        <Text>To Flat list</Text>
+      </Pressable>
     </View>
   );
 }
