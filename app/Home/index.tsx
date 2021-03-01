@@ -15,6 +15,11 @@ function Home({navigation}: StackScreenProps<any>) {
         onPress={() => navigation.navigate('FlatList')}>
         <Text>To Flat list</Text>
       </Pressable>
+      <Pressable
+        style={{padding: 16}}
+        onPress={() => navigation.navigate('TTS')}>
+        <Text>To TTS</Text>
+      </Pressable>
     </View>
   );
 }
